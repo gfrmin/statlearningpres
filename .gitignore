@@ -3,3 +3,9 @@
 .RData
 *.Rproj
 *.png
+*.jpg
+*.txt
+*.pdf
+*.zip
+*.sas
+/gapres_files/

@@ -1,29 +1,34 @@
 Statistical Learning with R
 ========================================================
 author: Guy Freeman <guy@dataguru.hk>
-date: Monday 16th June 2014
+date: Monday 20th October 2014
+
+Source: rpubs.com/slygent/statlearn
 
 Statistical learning with R
 ========================================================
-width: 1920
-height: 1080
-
+width: 3200
+height: 1800
 
 
 - Why learning?
 - Why statistical learning?
 - Why R?
 - Why me?
- - I use R to carry out statistical learning every (week)day for DemystData.
+ - I use R to carry out statistical learning almost every day.
+
+![](knn1.png)
 
 R, the statistical programming language
 ========================================================
 
-I know that Mart has been using Python with you, which is all well and good.
+I know that Mart has been using Python with you, but I want to show you an alternative.
 
-I've been using R for 15 years now, and I want to show you the advantages (and maybe a few disadvantages) of using a programming language designed purely for statistical analysis. Then you can decide which tool to use for different occasions.
+I've been using R for 15 years now, and I want to show you the advantages (and maybe a few disadvantages) of using a programming language designed purely for statistical analysis. Then you can use different tools for different situations.
 
-The New York Times approves of R! http://www.nytimes.com/2009/01/07/technology/business-computing/07program.html?pagewanted=all
+The New York Times approves of R! http://www.nytimes.com/2009/01/07/technology/business-computing/07program.html
+
+And most recently, Bayesian statistics, the foundation of statistical learning: http://www.nytimes.com/2014/09/30/science/the-odds-continually-updated.html
 
 Statistical learning -- it's like machine learning, but better
 ========================================================
@@ -34,16 +39,25 @@ These are my subjective definitions:
 
 _Statistical learning_ is machine learning where you understand why the algorithms work and when they work.
 
+I highly recommend the book "An Introduction to Statistical Learning: With Applications in R" by Gareth James et al for an overview. I heavily leaned on this book for today's lesson :)
+
+
+An Introduction to Statistical Learning: With Applications in R
+====
+![](cover.jpg)
+
 Introduction to R
 ===
 
-"R is a language and environment for statistical computing and graphics" -- the official description of R at its homepage r-project.org
+"R is a language and environment for statistical computing and graphics" -- the official description of R at its homepage www.r-project.org
 
 It also happens to be Free Software (just like Python). You can use it without paying money, and you can copy it and modify it and distribute it.
 
+![](Rlogo.jpg)
+
 You can download it from http://cran.r-project.org/
 
-You can optionally install RStudio, and Integrated Development Environment for R, from http://www.rstudio.com/products/rstudio/download/
+I highly recommend you also install RStudio, an Integrated Development Environment (IDE) for R that works on Windows, Mac and Linux, from http://www.rstudio.com/products/rstudio/download/
 
 Functions in R
 ===
@@ -58,9 +72,8 @@ sum(3,5,500,pi)
 ```
 
 ```
-[1] 511.1
+[1] 511.1416
 ```
-
 
 Vectors in R
 ===
@@ -77,7 +90,6 @@ x
 [1]  1  8  7 15
 ```
 
-
 Many functions in R are "vectorized", which means they know what to do with vectors. Adding two vectors, for example, works how you'd expect:
 
 
@@ -89,7 +101,6 @@ y + x
 ```
 [1] 21 16 11 16
 ```
-
 
 Objects in R
 ===
@@ -105,7 +116,6 @@ ls()
 [1] "x" "y"
 ```
 
-
 Delete anything you don't want any more with `rm()`:
 
 
@@ -117,7 +127,6 @@ ls()
 ```
 [1] "x"
 ```
-
 
 Matrices in R (with some help)
 ===
@@ -146,7 +155,6 @@ matrix(c(1,2,3,4), 2, 2)
 [2,]    2    4
 ```
 
-
 Random variables in R
 ===
 
@@ -158,13 +166,12 @@ set.seed(3) # to make sure our random numbers are the same!
 y <- rnorm(100) # 100 random normal variables with mean 0 and s.d. 1
 ```
 
-
 ```r
 mean(y)
 ```
 
 ```
-[1] 0.01104
+[1] 0.01103557
 ```
 
 ```r
@@ -172,19 +179,19 @@ var(y)
 ```
 
 ```
-[1] 0.7329
+[1] 0.7328675
 ```
-
 
 Random variables in R
 ===
+Standard deviation is the square root of the variance.
 
 ```r
 sqrt(var(y))
 ```
 
 ```
-[1] 0.8561
+[1] 0.8560768
 ```
 
 ```r
@@ -192,9 +199,8 @@ sd(y)
 ```
 
 ```
-[1] 0.8561
+[1] 0.8560768
 ```
-
 
 Graphics in R
 ===
@@ -206,10 +212,9 @@ y=rnorm(100)
 plot(x,y)
 ```
 
-<img src="gapres-figure/unnamed-chunk-11.png" title="plot of chunk unnamed-chunk-11" alt="plot of chunk unnamed-chunk-11" height="550px" style="display: block; margin: auto;" />
+<img src="gapres-figure/unnamed-chunk-11-1.png" title="plot of chunk unnamed-chunk-11" alt="plot of chunk unnamed-chunk-11" height="550px" style="display: block; margin: auto;" />
 
-
-Nicer graphics in R
+Annotations in R
 ===
 
 ```r
@@ -217,8 +222,7 @@ plot(x,y,xlab="this is the x-axis",ylab="this is the y-axis",
 main="Plot of X vs Y")
 ```
 
-<img src="gapres-figure/unnamed-chunk-12.png" title="plot of chunk unnamed-chunk-12" alt="plot of chunk unnamed-chunk-12" height="550px" style="display: block; margin: auto;" />
-
+<img src="gapres-figure/unnamed-chunk-12-1.png" title="plot of chunk unnamed-chunk-12" alt="plot of chunk unnamed-chunk-12" height="550px" style="display: block; margin: auto;" />
 
 Contour plots
 === 
@@ -226,12 +230,11 @@ Contour plots
 ```r
 x <- seq(-pi,pi,length=50) # from -pi to pi in 50 steps
 y <- x
-f <- outer(x,y,function (x,y)cos(y)/(1+x^2))
+f <- outer(x,y,function (x,y)cos(y)/(1+x^2)) # 
 contour(x,y,f)
 ```
 
-<img src="gapres-figure/unnamed-chunk-13.png" title="plot of chunk unnamed-chunk-13" alt="plot of chunk unnamed-chunk-13" height="450px" style="display: block; margin: auto;" />
-
+<img src="gapres-figure/unnamed-chunk-13-1.png" title="plot of chunk unnamed-chunk-13" alt="plot of chunk unnamed-chunk-13" height="450px" style="display: block; margin: auto;" />
 
 Indexing data
 ===
@@ -267,7 +270,6 @@ A[c(1,3),c(2,4)]
 [2,]    7   15
 ```
 
-
 Indexing data
 ===
 
@@ -293,7 +295,6 @@ A[-c(1,3),] # ignore 1st and 3rd rows
 [2,]    4    8   12   16
 ```
 
-
 Loading data into data frame
 ===
 
@@ -309,13 +310,12 @@ colnames(auto)
 ```
 
 ```r
-head(auto$mpg)
+head(auto$mpg) # access column
 ```
 
 ```
 [1] 18 15 18 16 17 15
 ```
-
 
 Exercises (to make sure you're awake)
 ===
@@ -330,7 +330,7 @@ Exercises (to make sure you're awake)
 Now we can start statistical learning!
 ===
 
-Statistical learning means using $input$ variables to predict $output$ variables. That's it.
+Statistical learning means using $input$ variables to predict $output$ variables. That's it. But that's easier said than done...
 
 
 ```r
@@ -345,13 +345,14 @@ head(Advertising, n=3)
 3 3  17.2  45.9      69.3   9.3
 ```
 
-
 How can we best predict Sales from the TV, Radio and Newspaper advertising budgets? (Why would we want to?)
 
 Statistical learning in one equation
 ===
 
-Let $Y$ be the output variable (e.g. sales), and $X$ the input variables $X_1, X_2, X_3, ...$ Then
+Let $Y$ be the output variable (e.g. sales), and $X$ the vector of input variables $X_1, X_2, X_3, ...$ 
+
+Then
 
 $$Y = f(X) + \epsilon $$
 
@@ -366,9 +367,9 @@ Once we have an estimate $\hat{f}$ for $f$, we can predict unavailable values of
 
 How good an estimate of $Y$ is $\hat{Y}$? The difference between the two values can be partitioned into *reducible* and *irreducible* errors:
 
-$$ E(Y - \hat{Y})^2 = [f(X) - \hat{f}(X)]^2 + \Var(\epsilon) $$
+$$ E(Y - \hat{Y})^2 = [f(X) - \hat{f}(X)]^2 + \sigma_\epsilon^2 $$
 
-where $[f(X) - \hat{f}(X)]^2$ is the reducible error, because (at least in theory) $\hat{f}$ can be improved.
+where $[f(X) - \hat{f}(X)]^2$ is the reducible error.
 
 How to estimate f
 ===
@@ -381,7 +382,7 @@ Two main approaches:
    
    Advantage: Much easier to estimate parameters than whole function.
    
-   Disadvantage: Our choice of $f$ might be wrong, or even very wrong.
+   Disadvantage: Our choice of the form of $f$ might be wrong, or even very wrong.
    
 How to estimate f
 ===   
@@ -408,16 +409,18 @@ We will focus on *supervised* learning with outputs today.
 Regression vs classification
 ===
 
-Variables can be either *quantitative* or *qualitative*. (Anyone who went to my Introduction to Data Science lecture will remember I am obsessed with this distinction). We care because different variable types affect the class of values we can make predictions from, and how to measure the size of an error from a wrong prediction.
+Variables can be either *quantitative* or *qualitative*. (Anyone who went to my Introduction to Data Science lecture will remember I am obsessed with this distinction). 
 
-When the output variable is quantitative, prediction is *regression*.
+We care about this because different variable types affect the class of values we can make predictions from and therefore the possible nature of $f$, and also how to measure the size of an error from a wrong prediction.
+
+When the output variable is quantitative, prediction is called *regression*.
 
 When the output variable is qualitative, prediction is *classification*.
 
 Assessing model accuracy
 ===
 
-How good is our $\hat{f}$? This is equivalent to asking how close each $\hat{f}(x)$ was to $y$. The most commonly-used score is the *Mean Squared Error* (MSE): $$ MSE = \frac{1}{n} \sum{(y_i - \hat{f}(x_i))^2} $$
+How good is our $\hat{f}$? This is equivalent to asking how close each $\hat{f}(x)$ was to $y$. The most commonly-used score for regression is the *Mean Squared Error* (MSE): $$ MSE = \frac{1}{n} \sum{(y_i - \hat{f}(x_i))^2} $$
 
 i.e. just sum up the squares of the differences between the predictions $\hat{f}(x_i)$ and the actual outputs $y_i$.
 
@@ -437,7 +440,7 @@ Increasing flexibilty leads to more accuracy, but after a while we are predictin
 Bias vs variance
 ===
 
-Why does the test MSE go down and then up. Because
+Why does the test MSE go down and then up? Because
 
 $$ E(y - \hat{f}(x))^2 = Var(\hat{f}(x)) + [Bias(\hat{f}(x))]^2 + Var(\epsilon) $$
 
@@ -456,60 +459,27 @@ For which of these situations would a flexible model/method be better than an in
 3. The relationship between the input and output variables is highly non-linear.
 4. The variance of the irreducible error is very high.
 
-K-Nearest Neighbours (KNN)
-===
-
-This is an intuitive learning method for classification. 
-
-For any value $x_0$, how should we predict $y_0$? Choose the $K$ nearest observations of $y$, and democratically select the most popular.
-
-K-Nearest Neighbours (KNN)
-===
-![](knn.png)
-
-With $K=3$, at the point x two neighbours are blue and one is orange, so we would predict blue. The right-hand panel shows predictions for $K=3$ for all possible values of $x$.
-
-K-Nearest Neighbours (KNN)
-===
-![](knnx.png)
-
-Obviously the value of $K$ determines the flexibility of the *decision boundary*, with all the bias-variance issues discussed earlier.
-
-KNN in R
-===
-
-```r
-knntrain <- data.frame(x1 = c(0,2,0,0,-1,1), x2 = c(3,0,1,1,0,1), x3 = c(0,0,3,2,1,1))
-library(class)
-knn(knntrain, c(0,0,0), c("red", "red", "red", "green", "green", "red"), k=1)
-```
-
-```
-[1] green
-Levels: green red
-```
-
-```r
-knn(knntrain, c(0,0,0), c("red", "red", "red", "green", "green", "red"), k=3)
-```
-
-```
-[1] red
-Levels: green red
-```
-
-
 Linear regression
 ===
 
-Back to `Advertising`. Are the various media budgets *linearly* associated with sales?
-<img src="gapres-figure/unnamed-chunk-19.png" title="plot of chunk unnamed-chunk-19" alt="plot of chunk unnamed-chunk-19" style="display: block; margin: auto;" />
+Back to `Advertising` at last. Are the various media budgets *linearly* associated with sales?
 
+```r
+library(ggplot2)
+library(reshape2)
+advmelt <- melt(Advertising, id.vars = c("X", "Sales"))
+```
 Hmm.
+***
+
+```r
+ggplot(advmelt, aes(x = value, y = Sales)) + geom_point() + facet_wrap(~ variable, scales="free_x")
+```
+
+<img src="gapres-figure/unnamed-chunk-19-1.png" title="plot of chunk unnamed-chunk-19" alt="plot of chunk unnamed-chunk-19" style="display: block; margin: auto;" />
 
 Linear regression in R
 ===
-<small>
 
 ```r
 summary(lm(Sales ~ TV + Radio + Newspaper, data = Advertising))
@@ -521,46 +491,42 @@ Call:
 lm(formula = Sales ~ TV + Radio + Newspaper, data = Advertising)
 
 Residuals:
-   Min     1Q Median     3Q    Max 
--8.828 -0.891  0.242  1.189  2.829 
+    Min      1Q  Median      3Q     Max 
+-8.8277 -0.8908  0.2418  1.1893  2.8292 
 
 Coefficients:
-            Estimate Std. Error t value Pr(>|t|)    
-(Intercept)  2.93889    0.31191    9.42   <2e-16 ***
-TV           0.04576    0.00139   32.81   <2e-16 ***
-Radio        0.18853    0.00861   21.89   <2e-16 ***
-Newspaper   -0.00104    0.00587   -0.18     0.86    
+             Estimate Std. Error t value Pr(>|t|)    
+(Intercept)  2.938889   0.311908   9.422   <2e-16 ***
+TV           0.045765   0.001395  32.809   <2e-16 ***
+Radio        0.188530   0.008611  21.893   <2e-16 ***
+Newspaper   -0.001037   0.005871  -0.177     0.86    
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
-Residual standard error: 1.69 on 196 degrees of freedom
-Multiple R-squared:  0.897,	Adjusted R-squared:  0.896 
-F-statistic:  570 on 3 and 196 DF,  p-value: <2e-16
+Residual standard error: 1.686 on 196 degrees of freedom
+Multiple R-squared:  0.8972,	Adjusted R-squared:  0.8956 
+F-statistic: 570.3 on 3 and 196 DF,  p-value: < 2.2e-16
 ```
-
-</small>
 
 Linear regression
 ===
 Why does newspaper advertising seem to have no effect on sales, despite the graph earlier seeming to show otherwise? 
 
 Consider the relationship between newspaper and radio budgets:
-<img src="gapres-figure/unnamed-chunk-21.png" title="plot of chunk unnamed-chunk-21" alt="plot of chunk unnamed-chunk-21" height="350px" style="display: block; margin: auto;" />
-
-Higher newspaper and radio budgets go together. So if only radio affects sales, there will still be a (spurious) association between newspaper advertising budgets and sales.
+<img src="gapres-figure/unnamed-chunk-21-1.png" title="plot of chunk unnamed-chunk-21" alt="plot of chunk unnamed-chunk-21" height="350px" style="display: block; margin: auto;" />
+Higher newspaper and radio budgets go together. So even if only radio affects sales, there will still be a (spurious) association between newspaper advertising budgets and sales.
 
 Model fit
 ===
 
 How good is our linear model? One way to ask this: How well does our model fit the data? 
 
-One measure is $R^2$, the square of the correlation between the predicted and actual sales values. For this model that value is 0.8972. Excluding newspapers, $R^2$ is... 0.8972. This suggests newspaper budgets are indeed useless for predicting sales.
+One measure is $R^2$, the square of the correlation between the predicted and actual sales values. For this model that value is 0.8972. Excluding newspapers, $R^2$ is... 0.8972. This suggests newspaper budgets are indeed unnecessary for predicting sales once TV and radio are taken into account.
 
 Linear in reality?
 ===
-But how linear is the data? Below is a graph of the errors for different values of TV advertising.
-<img src="gapres-figure/unnamed-chunk-22.png" title="plot of chunk unnamed-chunk-22" alt="plot of chunk unnamed-chunk-22" height="350px" style="display: block; margin: auto;" />
-
+But how linear is the data? Below is a graph of the prediction errors for different values of TV advertising.
+<img src="gapres-figure/unnamed-chunk-22-1.png" title="plot of chunk unnamed-chunk-22" alt="plot of chunk unnamed-chunk-22" height="350px" style="display: block; margin: auto;" />
 It can be seen that for low and high values of TV advertising, the model over-predicts sales, while underestimating in the middle. This systematic error indicates the true relationship is not linear.
 
 Extending the linear model
@@ -583,23 +549,22 @@ Call:
 lm(formula = Sales ~ TV + Radio + TV:Radio)
 
 Residuals:
-   Min     1Q Median     3Q    Max 
--6.337 -0.403  0.183  0.595  1.525 
+    Min      1Q  Median      3Q     Max 
+-6.3366 -0.4028  0.1831  0.5948  1.5246 
 
 Coefficients:
-            Estimate Std. Error t value Pr(>|t|)    
-(Intercept) 6.75e+00   2.48e-01   27.23   <2e-16 ***
-TV          1.91e-02   1.50e-03   12.70   <2e-16 ***
-Radio       2.89e-02   8.91e-03    3.24   0.0014 ** 
-TV:Radio    1.09e-03   5.24e-05   20.73   <2e-16 ***
+             Estimate Std. Error t value Pr(>|t|)    
+(Intercept) 6.750e+00  2.479e-01  27.233   <2e-16 ***
+TV          1.910e-02  1.504e-03  12.699   <2e-16 ***
+Radio       2.886e-02  8.905e-03   3.241   0.0014 ** 
+TV:Radio    1.086e-03  5.242e-05  20.727   <2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
-Residual standard error: 0.944 on 196 degrees of freedom
-Multiple R-squared:  0.968,	Adjusted R-squared:  0.967 
-F-statistic: 1.96e+03 on 3 and 196 DF,  p-value: <2e-16
+Residual standard error: 0.9435 on 196 degrees of freedom
+Multiple R-squared:  0.9678,	Adjusted R-squared:  0.9673 
+F-statistic:  1963 on 3 and 196 DF,  p-value: < 2.2e-16
 ```
-
 </small>
 
 Non-linear linear models
@@ -615,25 +580,24 @@ Call:
 lm(formula = Sales ~ TV + I(TV^2))
 
 Residuals:
-   Min     1Q Median     3Q    Max 
--7.684 -1.784 -0.156  2.009  7.510 
+    Min      1Q  Median      3Q     Max 
+-7.6844 -1.7843 -0.1562  2.0088  7.5097 
 
 Coefficients:
-             Estimate Std. Error t value Pr(>|t|)    
-(Intercept)  6.11e+00   6.59e-01    9.27  < 2e-16 ***
-TV           6.73e-02   1.06e-02    6.35  1.5e-09 ***
-I(TV^2)     -6.85e-05   3.56e-05   -1.92    0.056 .  
+              Estimate Std. Error t value Pr(>|t|)    
+(Intercept)  6.114e+00  6.592e-01   9.275  < 2e-16 ***
+TV           6.727e-02  1.059e-02   6.349 1.46e-09 ***
+I(TV^2)     -6.847e-05  3.558e-05  -1.924   0.0557 .  
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
-Residual standard error: 3.24 on 197 degrees of freedom
-Multiple R-squared:  0.619,	Adjusted R-squared:  0.615 
-F-statistic:  160 on 2 and 197 DF,  p-value: <2e-16
+Residual standard error: 3.237 on 197 degrees of freedom
+Multiple R-squared:  0.619,	Adjusted R-squared:  0.6152 
+F-statistic: 160.1 on 2 and 197 DF,  p-value: < 2.2e-16
 ```
-
 </small>
 
-Exercises
+Example
 ===
 
 ```r
@@ -648,8 +612,7 @@ names(Boston)
  [8] "dis"     "rad"     "tax"     "ptratio" "black"   "lstat"   "medv"   
 ```
 
-
-Exercises
+Example
 ===
 
 ```r
@@ -658,12 +621,26 @@ plot(Boston$lstat, Boston$medv)
 abline(bostonlm)
 ```
 
-<img src="gapres-figure/unnamed-chunk-26.png" title="plot of chunk unnamed-chunk-26" alt="plot of chunk unnamed-chunk-26" height="450px" style="display: block; margin: auto;" />
+<img src="gapres-figure/unnamed-chunk-26-1.png" title="plot of chunk unnamed-chunk-26" alt="plot of chunk unnamed-chunk-26" height="450px" style="display: block; margin: auto;" />
+Is this linear?
 
+Example
+===
+Let's look at the behaviour of the _residuals_ (prediction errors):
 
-Exercises -- multiple linear regression
+```r
+plot(predict(bostonlm), residuals(bostonlm))
+```
+
+<img src="gapres-figure/unnamed-chunk-27-1.png" title="plot of chunk unnamed-chunk-27" alt="plot of chunk unnamed-chunk-27" style="display: block; margin: auto;" />
+
+Example -- multiple linear regression
 ===
 <small>
+
+```r
+summary(lm(medv~lstat+age,data=Boston))
+```
 
 ```
 
@@ -671,25 +648,24 @@ Call:
 lm(formula = medv ~ lstat + age, data = Boston)
 
 Residuals:
-   Min     1Q Median     3Q    Max 
--15.98  -3.98  -1.28   1.97  23.16 
+    Min      1Q  Median      3Q     Max 
+-15.981  -3.978  -1.283   1.968  23.158 
 
 Coefficients:
             Estimate Std. Error t value Pr(>|t|)    
-(Intercept)  33.2228     0.7308   45.46   <2e-16 ***
-lstat        -1.0321     0.0482  -21.42   <2e-16 ***
-age           0.0345     0.0122    2.83   0.0049 ** 
+(Intercept) 33.22276    0.73085  45.458  < 2e-16 ***
+lstat       -1.03207    0.04819 -21.416  < 2e-16 ***
+age          0.03454    0.01223   2.826  0.00491 ** 
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
-Residual standard error: 6.17 on 503 degrees of freedom
-Multiple R-squared:  0.551,	Adjusted R-squared:  0.549 
-F-statistic:  309 on 2 and 503 DF,  p-value: <2e-16
+Residual standard error: 6.173 on 503 degrees of freedom
+Multiple R-squared:  0.5513,	Adjusted R-squared:  0.5495 
+F-statistic:   309 on 2 and 503 DF,  p-value: < 2.2e-16
 ```
-
 </small>
 
-Exercises -- one for all....
+Example -- one for all....
 ===
 
 ```
@@ -699,30 +675,55 @@ lm(formula = medv ~ ., data = Boston)
 
 Residuals:
     Min      1Q  Median      3Q     Max 
--15.594  -2.730  -0.518   1.777  26.199 
+-15.595  -2.730  -0.518   1.777  26.199 
 
 Coefficients:
-             Estimate Std. Error t value Pr(>|t|)    
-(Intercept)  3.65e+01   5.10e+00    7.14  3.3e-12 ***
-crim        -1.08e-01   3.29e-02   -3.29  0.00109 ** 
-zn           4.64e-02   1.37e-02    3.38  0.00078 ***
-indus        2.06e-02   6.15e-02    0.33  0.73829    
-chas         2.69e+00   8.62e-01    3.12  0.00193 ** 
-nox         -1.78e+01   3.82e+00   -4.65  4.2e-06 ***
-rm           3.81e+00   4.18e-01    9.12  < 2e-16 ***
-age          6.92e-04   1.32e-02    0.05  0.95823    
-dis         -1.48e+00   1.99e-01   -7.40  6.0e-13 ***
-rad          3.06e-01   6.63e-02    4.61  5.1e-06 ***
-tax         -1.23e-02   3.76e-03   -3.28  0.00111 ** 
-ptratio     -9.53e-01   1.31e-01   -7.28  1.3e-12 ***
-black        9.31e-03   2.69e-03    3.47  0.00057 ***
-lstat       -5.25e-01   5.07e-02  -10.35  < 2e-16 ***
+              Estimate Std. Error t value Pr(>|t|)    
+(Intercept)  3.646e+01  5.103e+00   7.144 3.28e-12 ***
+crim        -1.080e-01  3.286e-02  -3.287 0.001087 ** 
+zn           4.642e-02  1.373e-02   3.382 0.000778 ***
+indus        2.056e-02  6.150e-02   0.334 0.738288    
+chas         2.687e+00  8.616e-01   3.118 0.001925 ** 
+nox         -1.777e+01  3.820e+00  -4.651 4.25e-06 ***
+rm           3.810e+00  4.179e-01   9.116  < 2e-16 ***
+age          6.922e-04  1.321e-02   0.052 0.958229    
+dis         -1.476e+00  1.995e-01  -7.398 6.01e-13 ***
+rad          3.060e-01  6.635e-02   4.613 5.07e-06 ***
+tax         -1.233e-02  3.760e-03  -3.280 0.001112 ** 
+ptratio     -9.527e-01  1.308e-01  -7.283 1.31e-12 ***
+black        9.312e-03  2.686e-03   3.467 0.000573 ***
+lstat       -5.248e-01  5.072e-02 -10.347  < 2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
-Residual standard error: 4.75 on 492 degrees of freedom
-Multiple R-squared:  0.741,	Adjusted R-squared:  0.734 
-F-statistic:  108 on 13 and 492 DF,  p-value: <2e-16
+Residual standard error: 4.745 on 492 degrees of freedom
+Multiple R-squared:  0.7406,	Adjusted R-squared:  0.7338 
+F-statistic: 108.1 on 13 and 492 DF,  p-value: < 2.2e-16
+```
+
+Example -- non-linear transformation
+===
+
+```
+
+Call:
+lm(formula = medv ~ lstat + I(lstat^2), data = Boston)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-15.2834  -3.8313  -0.5295   2.3095  25.4148 
+
+Coefficients:
+             Estimate Std. Error t value Pr(>|t|)    
+(Intercept) 42.862007   0.872084   49.15   <2e-16 ***
+lstat       -2.332821   0.123803  -18.84   <2e-16 ***
+I(lstat^2)   0.043547   0.003745   11.63   <2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 5.524 on 503 degrees of freedom
+Multiple R-squared:  0.6407,	Adjusted R-squared:  0.6393 
+F-statistic: 448.5 on 2 and 503 DF,  p-value: < 2.2e-16
 ```
 
 
@@ -740,24 +741,32 @@ Using the `Auto` dataset:
 
 Exercises
 ===
-1. Use the `lm` function to regress `mpg` against all other variables (except `name`).
+3. Use the `lm` function to regress `mpg` against all other variables (except `name`).
   - Is there a relationship?
   - Which predictors are statistically significant?
   - What does the coefficient for `year` suggest?
   
-2. Use * and : to fit regression models with interactions. Are the interactions statistically significant?
+4. Use * and : to fit regression models with interactions. Are the interactions statistically significant?
 
 Classification
 ===
 Linear regression was a fine first step for quantitative responses. What about qualitative (categorical) responses?
 
-We don't want to make predictions on a continuous scale, so linear regression can't be used. But it turns out we can predict probabilities of belonging to a class and then classifying with that...
+We don't want to make predictions on a continuous scale, so linear regression can't be used. But it turns out we can predict probabilities of belonging to a class (i.e. numbers continuous between 0 and 1) and then classifying with that...
 
-Motivating example (nothing like DemystData)
+Motivating example
 ===
-Can we predict if someone will default on their credit card payment on the basis of their annual income and credit card balance? Let's find out using the `Default` dataset.
-<img src="gapres-figure/unnamed-chunk-29.png" title="plot of chunk unnamed-chunk-29" alt="plot of chunk unnamed-chunk-29" width="450px" style="display: block; margin: auto;" />
+Can we predict if someone will default on their credit card payment on the basis of their annual income and credit card balance? Let's find out using the `Default` dataset in the `ISLR` package.
 
+```r
+library(ISLR)
+ggplot(Default, aes(x = balance, y = income)) + geom_point(aes(colour = default), shape = 3)
+```
+
+Motivating example
+===
+Can we predict if someone will default on their credit card payment on the basis of their annual income and credit card balance? Let's find out using the `Default` dataset in the `ISLR` package.
+<img src="gapres-figure/unnamed-chunk-32-1.png" title="plot of chunk unnamed-chunk-32" alt="plot of chunk unnamed-chunk-32" style="display: block; margin: auto;" />
 
 Why not linear regression?
 ===
@@ -788,7 +797,7 @@ This will ensure the prediction is between 0 and 1. Re-arranging:
 
 $$ \frac{p(X)}{1 - p(X)} = \beta_0 + \beta_1 X $$
 
-Linear again!
+Linear again! But in a transformed variable.
 
 Logistic regression
 ===
@@ -803,13 +812,13 @@ Call:
 glm(formula = default ~ balance, family = binomial, data = Default)
 
 Deviance Residuals: 
-   Min      1Q  Median      3Q     Max  
--2.270  -0.146  -0.059  -0.022   3.759  
+    Min       1Q   Median       3Q      Max  
+-2.2697  -0.1465  -0.0589  -0.0221   3.7589  
 
 Coefficients:
-             Estimate Std. Error z value Pr(>|z|)    
-(Intercept) -10.65133    0.36116   -29.5   <2e-16 ***
-balance       0.00550    0.00022    24.9   <2e-16 ***
+              Estimate Std. Error z value Pr(>|z|)    
+(Intercept) -1.065e+01  3.612e-01  -29.49   <2e-16 ***
+balance      5.499e-03  2.204e-04   24.95   <2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
@@ -817,11 +826,10 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
     Null deviance: 2920.6  on 9999  degrees of freedom
 Residual deviance: 1596.5  on 9998  degrees of freedom
-AIC: 1600
+AIC: 1600.5
 
 Number of Fisher Scoring iterations: 8
 ```
-
 
 Logistic regression
 ===
@@ -837,15 +845,15 @@ glm(formula = default ~ balance + income + student, family = binomial,
     data = Default)
 
 Deviance Residuals: 
-   Min      1Q  Median      3Q     Max  
--2.469  -0.142  -0.056  -0.020   3.738  
+    Min       1Q   Median       3Q      Max  
+-2.4691  -0.1418  -0.0557  -0.0203   3.7383  
 
 Coefficients:
-             Estimate Std. Error z value Pr(>|z|)    
-(Intercept) -1.09e+01   4.92e-01  -22.08   <2e-16 ***
-balance      5.74e-03   2.32e-04   24.74   <2e-16 ***
-income       3.03e-06   8.20e-06    0.37   0.7115    
-studentYes  -6.47e-01   2.36e-01   -2.74   0.0062 ** 
+              Estimate Std. Error z value Pr(>|z|)    
+(Intercept) -1.087e+01  4.923e-01 -22.080  < 2e-16 ***
+balance      5.737e-03  2.319e-04  24.738  < 2e-16 ***
+income       3.033e-06  8.203e-06   0.370  0.71152    
+studentYes  -6.468e-01  2.363e-01  -2.738  0.00619 ** 
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
@@ -853,11 +861,10 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
     Null deviance: 2920.6  on 9999  degrees of freedom
 Residual deviance: 1571.5  on 9996  degrees of freedom
-AIC: 1580
+AIC: 1579.5
 
 Number of Fisher Scoring iterations: 8
 ```
-
 
 Model goodness
 ===
@@ -869,8 +876,7 @@ Actual default FALSE TRUE
            No   9627   40
            Yes   228  105
 ```
-
-So although overall error rate is low, the false negative error rate (those we mistakenly said won't default) is 228/(228+105) = 0.6847. That's not the best error rate ever... But the false positive rate is only 40/(9627+40) = 0.0041.
+So although overall error rate is low, the false negative error rate (those we mistakenly said won't default) is 228/(228+105) = 0.68. That's not the best error rate ever... But the false positive rate is only 40/(9627+40) = 0.004...
 
 ROC curves
 ===
@@ -882,15 +888,26 @@ Actual default FALSE TRUE
            No   9390  277
            Yes   130  203
 ```
-
-Now the false negative error rate is 0.3904, although the false positive rate has increased to 0.0287. Changing the threshold always results in this trade-off.
+Now the false negative error rate is 0.39, although the false positive rate has increased to 0.03. Changing the threshold always results in this trade-off.
 
 ROC curves
 ===
 What are the error rates across thresholds? The *ROC curve* can show this.
-<img src="gapres-figure/unnamed-chunk-34.png" title="plot of chunk unnamed-chunk-34" alt="plot of chunk unnamed-chunk-34" height="400px" style="display: block; margin: auto;" />
 
-As we want the curve to touch the top-left hand corner, we can use the *area under the curve* (AUC) to determine the quality of the classifier. This time the AUC is 0.9496.
+```r
+#out.height="300px"}
+library(ROCR)
+pred <- prediction(Default$preds, Default$default)
+perf <- performance(pred, measure = "tpr", x.measure = "fpr") 
+plot(perf, col=rainbow(10))
+```
+
+<img src="gapres-figure/unnamed-chunk-37-1.png" title="plot of chunk unnamed-chunk-37" alt="plot of chunk unnamed-chunk-37" style="display: block; margin: auto;" />
+
+ROC curves
+===
+<img src="gapres-figure/unnamed-chunk-38-1.png" title="plot of chunk unnamed-chunk-38" alt="plot of chunk unnamed-chunk-38" style="display: block; margin: auto;" />
+As we want the curve to touch the top-left hand corner, we can use the *area under the curve* (AUC) to determine the quality of the classifier. This time the AUC is 0.95.
 
 Exercises
 ===
@@ -899,4 +916,184 @@ Use the `Weekly` data from the `ISLR` package.
 1. Produce some summaries of the data. Are there any patterns?
 2. Fit a logistic regression model to explain `Direction` using the `Lag`s and `Volume`. Which factors are significant?
 3. Make a confusion matrix for this model using `table`.
-4. Fit a logistic model and a KNN model with K=1 with only `Lag2` as a predictor. Which model is better?
+4. Fit a logistic model and a KNN model with K=1 with only `Lag2` as a predictor. (Check out `knn` function). Which model is better?
+
+Advanced R features -- data.table
+===
+
+(Inspired by http://adv-r.had.co.nz/)
+
+It turns out that `data.frame`s, the base form of data structure in R, have an annoying syntax. Enter `data.table`s.
+
+```r
+library(data.table)
+defaultdt <- as.data.table(Default)
+defaultdt
+```
+
+```
+       default student   balance   income        preds
+    1:      No      No  729.5265 44361.63 1.428724e-03
+    2:      No     Yes  817.1804 12106.13 1.122204e-03
+    3:      No      No 1073.5492 31767.14 9.812272e-03
+    4:      No      No  529.2506 35704.49 4.415893e-04
+    5:      No      No  785.6559 38463.50 1.935506e-03
+   ---                                                
+ 9996:      No      No  711.5550 52992.38 1.323097e-03
+ 9997:      No      No  757.9629 19660.72 1.560251e-03
+ 9998:      No      No  845.4120 58636.16 2.896172e-03
+ 9999:      No      No 1569.0091 36669.11 1.471436e-01
+10000:      No     Yes  200.9222 16862.95 3.322825e-05
+```
+
+Advanced R features -- data.table
+===
+
+It turns out that `data.frame`s, the base form of data structure in R, have an annoying syntax. Enter `data.table`s.
+
+```r
+library(data.table)
+defaultdt <- as.data.table(Default)
+defaultdt[student=="No",list(meanbalance = mean(balance), sdbalance = sd(balance), meanincome = mean(income)),by=default]
+```
+
+```
+   default meanbalance sdbalance meanincome
+1:      No    744.5044  445.5151   39993.52
+2:     Yes   1678.4295  330.9141   40625.05
+```
+
+Advanced R features -- Grammar of Graphics (ggplot2)
+===
+
+This builds graphs using a grammar to describe how aesthetic (geometrical) elements relate to the data/statistics, rather than detailing where every point goes. This allows for a concise and coherent description of complex graphs. For example, http://stats.stackexchange.com/questions/87132/what-is-the-proper-name-for-a-river-plot-visualisation shows how to re-create the famous Minard graph of the fate of Napoleon's Grand Army in the 1812 Russian campaign.
+
+Advanced R features -- Grammar of Graphics (ggplot2)
+===
+
+![](http://www.datavis.ca/gallery/minard/orig.gif)
+![](http://www.datavis.ca/gallery/minard/ggplot2/temps.jpg)
+
+Advanced R features -- closures
+===
+
+Closures are functions that return functions, e.g.
+
+```r
+power <- function(exponent) {
+  function(x) {
+    x ^ exponent
+  }
+}
+square <- power(2)
+square(2)
+```
+
+```
+[1] 4
+```
+
+```r
+square(4)
+```
+
+```
+[1] 16
+```
+
+Advanced R features -- functionals
+===
+
+Functionals take functions as arguments, e.g.
+
+```r
+randomise <- function(f) f(runif(1e3))
+randomise(mean)
+```
+
+```
+[1] 0.4929153
+```
+
+```r
+randomise(mean)
+```
+
+```
+[1] 0.5073444
+```
+
+```r
+randomise(sum)
+```
+
+```
+[1] 512.9456
+```
+
+Advanced R features -- domain-specific languages
+===
+
+Formulas (`y ~ x`) and ggplot2 provide new syntaxes within R. Here's another example, converting R code to SQL:
+
+```r
+library(dplyr)
+translate_sql(sin(x) + tan(y))
+```
+
+```
+<SQL> SIN("x") + TAN("y")
+```
+
+```r
+translate_sql(x < 5 & !(y >= 5))
+```
+
+```
+<SQL> "x" < 5.0 AND NOT(("y" >= 5.0))
+```
+
+Advanced R features -- Use C++ within R
+====
+
+Sometimes you want to use C++ code to do something, probably because it's much faster than R or it has a ready-made implementation of a complicated data structure or algorithm that R lacks.
+
+```r
+library(Rcpp)
+cppFunction('int add(int x, int y, int z) {
+  int sum = x + y + z;
+  return sum;
+}')
+add(1,2,3)
+```
+
+```
+[1] 6
+```
+
+Advanced R features -- Use C++ within R
+====
+
+```r
+cppFunction('double meanC(NumericVector x) {
+  int n = x.size();
+  double total = 0;
+  for(int i = 0; i < n; ++i) {
+    total += x[i];
+  }
+  return total / n;
+}')
+library(microbenchmark)
+x <- runif(1e5)
+microbenchmark(
+  mean(x), # internal mean
+  meanC(x) # new mean function
+)
+```
+
+```
+Unit: microseconds
+     expr     min       lq     mean  median      uq     max neval
+  mean(x) 200.074 200.5095 207.3000 200.890 204.231 287.093   100
+ meanC(x)  98.654  98.8580 102.1444  99.098  99.746 185.675   100
+```

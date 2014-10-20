@@ -1,12 +1,14 @@
 Statistical Learning with R
 ========================================================
 author: Guy Freeman <guy@dataguru.hk>
-date: Monday 16th June 2014
+date: Monday 20th October 2014
+
+Source: rpubs.com/slygent/statlearn
 
 Statistical learning with R
 ========================================================
-width: 1920
-height: 1080
+width: 3200
+height: 1800
 ```{r echo=FALSE}
 opts_chunk$set(fig.align='center')
 ```
@@ -15,16 +17,20 @@ opts_chunk$set(fig.align='center')
 - Why statistical learning?
 - Why R?
 - Why me?
- - I use R to carry out statistical learning every (week)day for DemystData.
+ - I use R to carry out statistical learning almost every day.
+
+![](knn1.png)
 
 R, the statistical programming language
 ========================================================
 
-I know that Mart has been using Python with you, which is all well and good.
+I know that Mart has been using Python with you, but I want to show you an alternative.
 
-I've been using R for 15 years now, and I want to show you the advantages (and maybe a few disadvantages) of using a programming language designed purely for statistical analysis. Then you can decide which tool to use for different occasions.
+I've been using R for 15 years now, and I want to show you the advantages (and maybe a few disadvantages) of using a programming language designed purely for statistical analysis. Then you can use different tools for different situations.
 
-The New York Times approves of R! http://www.nytimes.com/2009/01/07/technology/business-computing/07program.html?pagewanted=all
+The New York Times approves of R! http://www.nytimes.com/2009/01/07/technology/business-computing/07program.html
+
+And most recently, Bayesian statistics, the foundation of statistical learning: http://www.nytimes.com/2014/09/30/science/the-odds-continually-updated.html
 
 Statistical learning -- it's like machine learning, but better
 ========================================================
@@ -35,16 +41,25 @@ These are my subjective definitions:
 
 _Statistical learning_ is machine learning where you understand why the algorithms work and when they work.
 
+I highly recommend the book "An Introduction to Statistical Learning: With Applications in R" by Gareth James et al for an overview. I heavily leaned on this book for today's lesson :)
+
+
+An Introduction to Statistical Learning: With Applications in R
+====
+![](cover.jpg)
+
 Introduction to R
 ===
 
-"R is a language and environment for statistical computing and graphics" -- the official description of R at its homepage r-project.org
+"R is a language and environment for statistical computing and graphics" -- the official description of R at its homepage www.r-project.org
 
 It also happens to be Free Software (just like Python). You can use it without paying money, and you can copy it and modify it and distribute it.
 
+![](Rlogo.jpg)
+
 You can download it from http://cran.r-project.org/
 
-You can optionally install RStudio, and Integrated Development Environment for R, from http://www.rstudio.com/products/rstudio/download/
+I highly recommend you also install RStudio, an Integrated Development Environment (IDE) for R that works on Windows, Mac and Linux, from http://www.rstudio.com/products/rstudio/download/
 
 Functions in R
 ===
@@ -117,6 +132,7 @@ var(y)
 
 Random variables in R
 ===
+Standard deviation is the square root of the variance.
 ```{r}
 sqrt(var(y))
 sd(y)
@@ -131,7 +147,7 @@ y=rnorm(100)
 plot(x,y)
 ```
 
-Nicer graphics in R
+Annotations in R
 ===
 ```{r out.height="550px"}
 plot(x,y,xlab="this is the x-axis",ylab="this is the y-axis",
@@ -143,7 +159,7 @@ Contour plots
 ```{r out.height="450px"}
 x <- seq(-pi,pi,length=50) # from -pi to pi in 50 steps
 y <- x
-f <- outer(x,y,function (x,y)cos(y)/(1+x^2))
+f <- outer(x,y,function (x,y)cos(y)/(1+x^2)) # 
 contour(x,y,f)
 ```
 
@@ -168,7 +184,7 @@ Loading data into data frame
 ```{r}
 auto <- read.csv("http://www-bcf.usc.edu/~gareth/ISL/Auto.csv")
 colnames(auto)
-head(auto$mpg)
+head(auto$mpg) # access column
 ```
 
 Exercises (to make sure you're awake)
@@ -184,7 +200,7 @@ Exercises (to make sure you're awake)
 Now we can start statistical learning!
 ===
 
-Statistical learning means using $input$ variables to predict $output$ variables. That's it.
+Statistical learning means using $input$ variables to predict $output$ variables. That's it. But that's easier said than done...
 
 ```{r}
 Advertising <- read.csv("http://www-bcf.usc.edu/~gareth/ISL/Advertising.csv")
@@ -196,7 +212,9 @@ How can we best predict Sales from the TV, Radio and Newspaper advertising budge
 Statistical learning in one equation
 ===
 
-Let $Y$ be the output variable (e.g. sales), and $X$ the input variables $X_1, X_2, X_3, ...$ Then
+Let $Y$ be the output variable (e.g. sales), and $X$ the vector of input variables $X_1, X_2, X_3, ...$ 
+
+Then
 
 $$Y = f(X) + \epsilon $$
 
@@ -211,9 +229,9 @@ Once we have an estimate $\hat{f}$ for $f$, we can predict unavailable values of
 
 How good an estimate of $Y$ is $\hat{Y}$? The difference between the two values can be partitioned into *reducible* and *irreducible* errors:
 
-$$ E(Y - \hat{Y})^2 = [f(X) - \hat{f}(X)]^2 + \Var(\epsilon) $$
+$$ E(Y - \hat{Y})^2 = [f(X) - \hat{f}(X)]^2 + \sigma_\epsilon^2 $$
 
-where $[f(X) - \hat{f}(X)]^2$ is the reducible error, because (at least in theory) $\hat{f}$ can be improved.
+where $[f(X) - \hat{f}(X)]^2$ is the reducible error.
 
 How to estimate f
 ===
@@ -226,7 +244,7 @@ Two main approaches:
    
    Advantage: Much easier to estimate parameters than whole function.
    
-   Disadvantage: Our choice of $f$ might be wrong, or even very wrong.
+   Disadvantage: Our choice of the form of $f$ might be wrong, or even very wrong.
    
 How to estimate f
 ===   
@@ -253,16 +271,18 @@ We will focus on *supervised* learning with outputs today.
 Regression vs classification
 ===
 
-Variables can be either *quantitative* or *qualitative*. (Anyone who went to my Introduction to Data Science lecture will remember I am obsessed with this distinction). We care because different variable types affect the class of values we can make predictions from, and how to measure the size of an error from a wrong prediction.
+Variables can be either *quantitative* or *qualitative*. (Anyone who went to my Introduction to Data Science lecture will remember I am obsessed with this distinction). 
 
-When the output variable is quantitative, prediction is *regression*.
+We care about this because different variable types affect the class of values we can make predictions from and therefore the possible nature of $f$, and also how to measure the size of an error from a wrong prediction.
+
+When the output variable is quantitative, prediction is called *regression*.
 
 When the output variable is qualitative, prediction is *classification*.
 
 Assessing model accuracy
 ===
 
-How good is our $\hat{f}$? This is equivalent to asking how close each $\hat{f}(x)$ was to $y$. The most commonly-used score is the *Mean Squared Error* (MSE): $$ MSE = \frac{1}{n} \sum{(y_i - \hat{f}(x_i))^2} $$
+How good is our $\hat{f}$? This is equivalent to asking how close each $\hat{f}(x)$ was to $y$. The most commonly-used score for regression is the *Mean Squared Error* (MSE): $$ MSE = \frac{1}{n} \sum{(y_i - \hat{f}(x_i))^2} $$
 
 i.e. just sum up the squares of the differences between the predictions $\hat{f}(x_i)$ and the actual outputs $y_i$.
 
@@ -282,7 +302,7 @@ Increasing flexibilty leads to more accuracy, but after a while we are predictin
 Bias vs variance
 ===
 
-Why does the test MSE go down and then up. Because
+Why does the test MSE go down and then up? Because
 
 $$ E(y - \hat{f}(x))^2 = Var(\hat{f}(x)) + [Bias(\hat{f}(x))]^2 + Var(\epsilon) $$
 
@@ -301,53 +321,26 @@ For which of these situations would a flexible model/method be better than an in
 3. The relationship between the input and output variables is highly non-linear.
 4. The variance of the irreducible error is very high.
 
-K-Nearest Neighbours (KNN)
-===
-
-This is an intuitive learning method for classification. 
-
-For any value $x_0$, how should we predict $y_0$? Choose the $K$ nearest observations of $y$, and democratically select the most popular.
-
-K-Nearest Neighbours (KNN)
-===
-![](knn.png)
-
-With $K=3$, at the point x two neighbours are blue and one is orange, so we would predict blue. The right-hand panel shows predictions for $K=3$ for all possible values of $x$.
-
-K-Nearest Neighbours (KNN)
-===
-![](knnx.png)
-
-Obviously the value of $K$ determines the flexibility of the *decision boundary*, with all the bias-variance issues discussed earlier.
-
-KNN in R
-===
-```{r}
-knntrain <- data.frame(x1 = c(0,2,0,0,-1,1), x2 = c(3,0,1,1,0,1), x3 = c(0,0,3,2,1,1))
-library(class)
-knn(knntrain, c(0,0,0), c("red", "red", "red", "green", "green", "red"), k=1)
-knn(knntrain, c(0,0,0), c("red", "red", "red", "green", "green", "red"), k=3)
-```
-
 Linear regression
 ===
 
-Back to `Advertising`. Are the various media budgets *linearly* associated with sales?
-```{r echo=FALSE}
+Back to `Advertising` at last. Are the various media budgets *linearly* associated with sales?
+```{r}
 library(ggplot2)
 library(reshape2)
 advmelt <- melt(Advertising, id.vars = c("X", "Sales"))
-ggplot(advmelt, aes(x = value, y = Sales)) + geom_point() + facet_wrap(~ variable, scales="free_x")
 ```
 Hmm.
+***
+```{r}
+ggplot(advmelt, aes(x = value, y = Sales)) + geom_point() + facet_wrap(~ variable, scales="free_x")
+```
 
 Linear regression in R
 ===
-<small>
 ```{r}
 summary(lm(Sales ~ TV + Radio + Newspaper, data = Advertising))
 ```
-</small>
 
 Linear regression
 ===
@@ -357,18 +350,18 @@ Consider the relationship between newspaper and radio budgets:
 ```{r echo=FALSE,out.height="350px"}
 plot(Advertising$Radio, Advertising$Newspaper)
 ```
-Higher newspaper and radio budgets go together. So if only radio affects sales, there will still be a (spurious) association between newspaper advertising budgets and sales.
+Higher newspaper and radio budgets go together. So even if only radio affects sales, there will still be a (spurious) association between newspaper advertising budgets and sales.
 
 Model fit
 ===
 
 How good is our linear model? One way to ask this: How well does our model fit the data? 
 
-One measure is $R^2$, the square of the correlation between the predicted and actual sales values. For this model that value is 0.8972. Excluding newspapers, $R^2$ is... 0.8972. This suggests newspaper budgets are indeed useless for predicting sales.
+One measure is $R^2$, the square of the correlation between the predicted and actual sales values. For this model that value is 0.8972. Excluding newspapers, $R^2$ is... 0.8972. This suggests newspaper budgets are indeed unnecessary for predicting sales once TV and radio are taken into account.
 
 Linear in reality?
 ===
-But how linear is the data? Below is a graph of the errors for different values of TV advertising.
+But how linear is the data? Below is a graph of the prediction errors for different values of TV advertising.
 ```{r echo = FALSE,out.height="350px"}
 Advertising$pred <- predict(lm(Sales ~ Radio + TV, data = Advertising))
 ggplot(Advertising, aes(x = TV, y = pred - Sales)) + geom_point() + stat_smooth()
@@ -408,7 +401,7 @@ detach(Advertising)
 ```
 </small>
 
-Exercises
+Example
 ===
 ```{r}
 library(MASS)
@@ -417,27 +410,43 @@ library(ISLR)
 names(Boston)
 ```
 
-Exercises
+Example
 ===
 ```{r, out.height="450px"}
 bostonlm <- lm(medv~lstat,data=Boston) # median home value vs low economic status
 plot(Boston$lstat, Boston$medv)
 abline(bostonlm)
 ```
+Is this linear?
 
-Exercises -- multiple linear regression
+Example
+===
+Let's look at the behaviour of the _residuals_ (prediction errors):
+```{r}
+plot(predict(bostonlm), residuals(bostonlm))
+```
+
+Example -- multiple linear regression
 ===
 <small>
-```{r echo=FALSE}
+```{r}
 summary(lm(medv~lstat+age,data=Boston))
 ```
 </small>
 
-Exercises -- one for all....
+Example -- one for all....
 ===
 ```{r echo=FALSE}
-summary(lm(medv~.,data=Boston),data=Boston)
+summary(lm(medv~.,data=Boston))
 ```
+
+Example -- non-linear transformation
+===
+```{r echo=FALSE}
+bostonlm2 <- lm(medv~lstat + I(lstat^2),data=Boston)
+summary(bostonlm2)
+```
+
 
 Exercises
 ===
@@ -453,23 +462,32 @@ Using the `Auto` dataset:
 
 Exercises
 ===
-1. Use the `lm` function to regress `mpg` against all other variables (except `name`).
+3. Use the `lm` function to regress `mpg` against all other variables (except `name`).
   - Is there a relationship?
   - Which predictors are statistically significant?
   - What does the coefficient for `year` suggest?
   
-2. Use * and : to fit regression models with interactions. Are the interactions statistically significant?
+4. Use * and : to fit regression models with interactions. Are the interactions statistically significant?
 
 Classification
 ===
 Linear regression was a fine first step for quantitative responses. What about qualitative (categorical) responses?
 
-We don't want to make predictions on a continuous scale, so linear regression can't be used. But it turns out we can predict probabilities of belonging to a class and then classifying with that...
+We don't want to make predictions on a continuous scale, so linear regression can't be used. But it turns out we can predict probabilities of belonging to a class (i.e. numbers continuous between 0 and 1) and then classifying with that...
 
-Motivating example (nothing like DemystData)
+Motivating example
 ===
-Can we predict if someone will default on their credit card payment on the basis of their annual income and credit card balance? Let's find out using the `Default` dataset.
-```{r echo=FALSE,out.width="450px"}
+Can we predict if someone will default on their credit card payment on the basis of their annual income and credit card balance? Let's find out using the `Default` dataset in the `ISLR` package.
+```{r eval=FALSE}
+library(ISLR)
+ggplot(Default, aes(x = balance, y = income)) + geom_point(aes(colour = default), shape = 3)
+```
+
+Motivating example
+===
+Can we predict if someone will default on their credit card payment on the basis of their annual income and credit card balance? Let's find out using the `Default` dataset in the `ISLR` package.
+```{r echo=FALSE} 
+#,out.width="550px"}
 library(ISLR)
 ggplot(Default, aes(x = balance, y = income)) + geom_point(aes(colour = default), shape = 3)
 ```
@@ -503,7 +521,7 @@ This will ensure the prediction is between 0 and 1. Re-arranging:
 
 $$ \frac{p(X)}{1 - p(X)} = \beta_0 + \beta_1 X $$
 
-Linear again!
+Linear again! But in a transformed variable.
 
 Logistic regression
 ===
@@ -525,7 +543,7 @@ defaultglm <- glm(default~balance+income+student,family = binomial,data=Default)
 Default$preds <- predict(defaultglm, type = "response")
 table(Default$default,Default$preds > 0.5,dnn=c("Actual default", "Predicted default"))
 ```
-So although overall error rate is low, the false negative error rate (those we mistakenly said won't default) is 228/(228+105) = `r 228/(228+105)`. That's not the best error rate ever... But the false positive rate is only 40/(9627+40) = `r 40/(9627+40)`.
+So although overall error rate is low, the false negative error rate (those we mistakenly said won't default) is 228/(228+105) = `r round(228/(228+105), 2)`. That's not the best error rate ever... But the false positive rate is only 40/(9627+40) = `r round(40/(9627+40), 3)`...
 
 ROC curves
 ===
@@ -535,18 +553,29 @@ defaultglm <- glm(default~balance+income+student,family = binomial,data=Default)
 Default$preds <- predict(defaultglm, type = "response")
 table(Default$default,Default$preds > 0.2,dnn=c("Actual default", "Predicted default"))
 ```
-Now the false negative error rate is `r 130/(130+203)`, although the false positive rate has increased to `r 277/(277+9390)`. Changing the threshold always results in this trade-off.
+Now the false negative error rate is `r round(130/(130+203), 2)`, although the false positive rate has increased to `r round(277/(277+9390), 2)`. Changing the threshold always results in this trade-off.
 
 ROC curves
 ===
 What are the error rates across thresholds? The *ROC curve* can show this.
-```{r echo=FALSE,out.height="400px"}
+```{r}
+#out.height="300px"}
 library(ROCR)
 pred <- prediction(Default$preds, Default$default)
 perf <- performance(pred, measure = "tpr", x.measure = "fpr") 
 plot(perf, col=rainbow(10))
 ```
-As we want the curve to touch the top-left hand corner, we can use the *area under the curve* (AUC) to determine the quality of the classifier. This time the AUC is `r unlist(performance(pred, measure = "auc"))@"y.values"`.
+
+ROC curves
+===
+```{r echo=FALSE}
+#,out.height="300px"}
+library(ROCR)
+pred <- prediction(Default$preds, Default$default)
+perf <- performance(pred, measure = "tpr", x.measure = "fpr") 
+plot(perf, col=rainbow(10))
+```
+As we want the curve to touch the top-left hand corner, we can use the *area under the curve* (AUC) to determine the quality of the classifier. This time the AUC is `r round(performance(pred, measure = "auc")@"y.values"[[1]], 2)`.
 
 Exercises
 ===
@@ -555,4 +584,105 @@ Use the `Weekly` data from the `ISLR` package.
 1. Produce some summaries of the data. Are there any patterns?
 2. Fit a logistic regression model to explain `Direction` using the `Lag`s and `Volume`. Which factors are significant?
 3. Make a confusion matrix for this model using `table`.
-4. Fit a logistic model and a KNN model with K=1 with only `Lag2` as a predictor. Which model is better?
+4. Fit a logistic model and a KNN model with K=1 with only `Lag2` as a predictor. (Check out `knn` function). Which model is better?
+
+Advanced R features -- data.table
+===
+
+(Inspired by http://adv-r.had.co.nz/)
+
+It turns out that `data.frame`s, the base form of data structure in R, have an annoying syntax. Enter `data.table`s.
+```{r}
+library(data.table)
+defaultdt <- as.data.table(Default)
+defaultdt
+```
+
+Advanced R features -- data.table
+===
+
+It turns out that `data.frame`s, the base form of data structure in R, have an annoying syntax. Enter `data.table`s.
+```{r}
+library(data.table)
+defaultdt <- as.data.table(Default)
+defaultdt[student=="No",list(meanbalance = mean(balance), sdbalance = sd(balance), meanincome = mean(income)),by=default]
+```
+
+Advanced R features -- Grammar of Graphics (ggplot2)
+===
+
+This builds graphs using a grammar to describe how aesthetic (geometrical) elements relate to the data/statistics, rather than detailing where every point goes. This allows for a concise and coherent description of complex graphs. For example, http://stats.stackexchange.com/questions/87132/what-is-the-proper-name-for-a-river-plot-visualisation shows how to re-create the famous Minard graph of the fate of Napoleon's Grand Army in the 1812 Russian campaign.
+
+Advanced R features -- Grammar of Graphics (ggplot2)
+===
+
+![](http://www.datavis.ca/gallery/minard/orig.gif)
+![](http://www.datavis.ca/gallery/minard/ggplot2/temps.jpg)
+
+Advanced R features -- closures
+===
+
+Closures are functions that return functions, e.g.
+```{r}
+power <- function(exponent) {
+  function(x) {
+    x ^ exponent
+  }
+}
+square <- power(2)
+square(2)
+square(4)
+```
+
+Advanced R features -- functionals
+===
+
+Functionals take functions as arguments, e.g.
+```{r}
+randomise <- function(f) f(runif(1e3))
+randomise(mean)
+randomise(mean)
+randomise(sum)
+```
+
+Advanced R features -- domain-specific languages
+===
+
+Formulas (`y ~ x`) and ggplot2 provide new syntaxes within R. Here's another example, converting R code to SQL:
+```{r}
+library(dplyr)
+translate_sql(sin(x) + tan(y))
+translate_sql(x < 5 & !(y >= 5))
+```
+
+Advanced R features -- Use C++ within R
+====
+
+Sometimes you want to use C++ code to do something, probably because it's much faster than R or it has a ready-made implementation of a complicated data structure or algorithm that R lacks.
+```{r}
+library(Rcpp)
+cppFunction('int add(int x, int y, int z) {
+  int sum = x + y + z;
+  return sum;
+}')
+add(1,2,3)
+```
+
+Advanced R features -- Use C++ within R
+====
+```{r}
+cppFunction('double meanC(NumericVector x) {
+  int n = x.size();
+  double total = 0;
+  for(int i = 0; i < n; ++i) {
+    total += x[i];
+  }
+  return total / n;
+}')
+library(microbenchmark)
+x <- runif(1e5)
+microbenchmark(
+  mean(x), # internal mean
+  meanC(x) # new mean function
+)
+```
